@@ -1,15 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* We lock these variables to our Light Theme colors */
+  --background: #f8fafc; /* tailwind slate-50 */
+  --foreground: #0f172a; /* tailwind slate-900 */
 }
 
 body {

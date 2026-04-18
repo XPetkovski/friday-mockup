@@ -10,16 +10,16 @@ export default function Navbar() {
                             <ShieldAlert className="text-white" size={20} />
                         </div>
                         <span className="text-xl font-bold tracking-tight text-slate-900">
-              Sunday 4:13
-            </span>
+                            Sunday 4:13
+                        </span>
                     </div>
 
                     <div className="flex items-center gap-4">
                         <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-100 text-[10px] font-black tracking-widest">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
                             LIVE MONITORING
                         </div>
                     </div>

@@ -1,10 +1,11 @@
-import {AlertCircle, Clock, CheckCircle2} from 'lucide-react';
+import {AlertCircle, CheckCircle2, Clock} from 'lucide-react';
 import {createClient} from '@/utils/supabase/server'; // Your Supabase server client
 import {Incident} from '@/types/Incident'; // The interface we made!
 
 export default async function DashboardPage() {
     // 1. Initialize Supabase
     const supabase = await createClient();
+
 
     // 2. Fetch the data directly from your table!
     // We cast it to 'Incident[]' so TypeScript knows the exact shape of the data.
@@ -20,6 +21,7 @@ export default async function DashboardPage() {
 
     // Fallback to empty array if data is null
     const activeIncidents = (data as Incident[]) || [];
+    console.log("SUPABASE DATA:", data);
 
     return (
         <div className="max-w-4xl mx-auto p-6 space-y-4">
@@ -55,26 +57,25 @@ export default async function DashboardPage() {
                                 <div className="flex items-center gap-3">
                                     <h3 className="font-semibold text-slate-900">{incident.title}</h3>
                                     {incident.severity === 'CRITICAL' && (
-                                        <span
-                                            className="px-2 py-0.5 text-[10px] font-bold bg-red-50 text-red-600 rounded-full border border-red-100 uppercase tracking-wider">
-                      Critical
-                    </span>
+                                        <span className="px-2 py-0.5 text-[10px] font-bold bg-red-50 text-red-600 rounded-full border border-red-100 uppercase tracking-wider">
+                                            Critical
+                                        </span>
                                     )}
                                 </div>
 
                                 <div className="flex items-center gap-3 text-xs text-slate-500 mt-1">
                                     {/* Note: Make sure these column names match what is actually in your Supabase table! */}
-                                    <span>{incident.reporter}</span>
+                                    <span>{incident.reported_by}</span>
                                     <span>•</span>
-                                    <span>{incident.timestamp}</span>
+                                    <span>{incident.created_at}</span>
                                     <span>•</span>
                                     <span className="flex items-center gap-1.5 uppercase font-semibold">
-                    <span className={`w-1.5 h-1.5 rounded-full ${
-                        incident.status === 'INVESTIGATING' ? 'bg-amber-500' :
-                            incident.status === 'RESOLVED' ? 'bg-green-500' : 'bg-slate-300'
-                    }`}/>
+                                        <span className={`w-1.5 h-1.5 rounded-full ${
+                                            incident.status === 'INVESTIGATING' ? 'bg-amber-500' : 
+                                            incident.status === 'RESOLVED' ? 'bg-green-500' : 'bg-slate-300'
+                                        }`}/>
                                         {incident.status}
-                  </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>

@@ -8,6 +8,6 @@ export interface Incident {
     title: string;
     severity: IncidentSeverity;
     status: IncidentStatus;
-    reporter: string;
-    timestamp: string;
+    reported_by: string;
+    created_at: string;
 }

@@ -2,6 +2,7 @@ import { login, signup } from '../actions'
 import { ShieldAlert } from 'lucide-react'
 import FInput from '@/components/ui/FInput';
 import FButton from "@/components/ui/FButton";
+// refactored
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ message: string }> }) {
     const resolvedParams = await searchParams;

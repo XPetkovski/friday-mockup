@@ -1,0 +1,80 @@
+name: ChatOps Deployment
+
+# 1. Listen for new comments on PRs or Issues
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  deploy:
+    name: Deploy to Environment
+    # 2. Only run IF the comment is on a Pull Request AND starts with ".deploy to"
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '.deploy to') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # 3. Add a 🚀 reaction to the comment so the developer knows the bot heard them
+      - name: Acknowledge Command
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: context.payload.comment.id,
+              content: 'rocket'
+            });
+
+      # 4. Extract the environment name from the comment
+      - name: Parse Environment
+        id: command
+        run: |
+          COMMENT="${{ github.event.comment.body }}"
+          # If comment is ".deploy to staging", this grabs the 3rd word ("staging")
+          ENV_NAME=$(echo "$COMMENT" | awk '{print $3}')
+          echo "Target Environment: $ENV_NAME"
+          
+          # Save it as an output variable for the next steps
+          echo "env=$ENV_NAME" >> $GITHUB_OUTPUT
+
+      # 5. Checkout the actual code from the Pull Request
+      - name: Checkout PR Code
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/head
+
+      # 6. Setup Node.js (Standard Next.js CI stuff)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # 7. The Actual Deployment (Replace with your actual deployment command)
+      - name: Deploy to ${{ steps.command.outputs.env }}
+        env:
+          TARGET_ENV: ${{ steps.command.outputs.env }}
+          # You would add your Vercel/Supabase tokens here
+          # VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "Initiating deployment for Friday4:30 to environment: $TARGET_ENV"
+          # Example: If you use Vercel CLI:
+          # npx vercel pull --yes --environment=$TARGET_ENV --token=$VERCEL_TOKEN
+          # npx vercel build --token=$VERCEL_TOKEN
+          # npx vercel deploy --prebuilt --token=$VERCEL_TOKEN
+
+      # 8. Report back to the PR with the success message
+      - name: Comment Success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Deployment to `${{ steps.command.outputs.env }}` completed successfully! Crisis Commanders can now review the changes.'
+            })

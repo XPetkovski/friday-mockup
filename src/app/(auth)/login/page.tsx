@@ -19,7 +19,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                 <label className="text-md font-bold" htmlFor="email">Email</label>
                 <FInput
                     name="email"
-                    placeholder="commander@friday430.com"
+                    placeholder="commander@sunday413.com"
                     required
                     type="email"
                 />

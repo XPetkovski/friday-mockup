@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         return result.toUIMessageStreamResponse();
 
     } catch (error: unknown) {
-        console.error("🔥 AI ROUTE ERROR:", error);
+        console.error("AI ROUTE ERROR:", error);
         const errorMessage = error instanceof Error ? error.message : "An error occurred";
         return new Response(
             JSON.stringify({ error: errorMessage }),
